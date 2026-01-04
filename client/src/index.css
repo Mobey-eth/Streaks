@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global theme tokens */
+:root {
+  --bg-offwhite: #F7F9FC;
+  --text-gray-900: #111827;
+  --text-gray-600: #4B5563;
+  --brand-blue: #2563EB; /* aligns with blue-600 */
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+/* App base */
+body {
+  margin: 0;
+  background-color: var(--bg-offwhite);
+  color: var(--text-gray-900);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Links */
+a {
+  @apply text-blue-600 hover:text-blue-700;
+}

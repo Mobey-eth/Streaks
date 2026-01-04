@@ -1,0 +1,21 @@
+{
+  "name": "streaks-tracker",
+  "version": "1.0.0",
+  "description": "Daily study/work tracker with streak functionality",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "build:client": "cd client && npm run build",
+    "copy:client": "cp -r client/dist/* server/public/",
+    "deploy:prepare": "npm run build:client && npm run copy:client",
+    "postinstall": "npm run deploy:prepare"
+  },
+  "devDependencies": {
+    "baseline-browser-mapping": "^2.9.11",
+    "concurrently": "^8.2.2"
+  }
+}

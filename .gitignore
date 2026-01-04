@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables (never commit secrets)
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
+
+# Vite / React build outputs
+dist/
+**/dist/
+
+# Server build output (if you copy client build into server/public)
+server/public/
+
+# Cache / temp
+.cache/
+.eslintcache
+*.pid
+*.seed
+*.tgz
+
+# Local database dumps / exports
+*.sql
+!server/database/schema.sql
+node_modules
