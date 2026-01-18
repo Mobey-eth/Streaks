@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import { useAuth } from './AuthContext';
 
@@ -20,13 +20,7 @@ export const StreakProvider = ({ children }) => {
   const [stats, setStats] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchStreakData();
-    }
-  }, [isAuthenticated]);
-
-  const fetchStreakData = async () => {
+  const fetchStreakData = useCallback(async () => {
     setIsLoading(true);
     try {
       const [streakRes, statsRes] = await Promise.all([
@@ -41,9 +35,15 @@ export const StreakProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const fetchDailyGoals = async (startDate, endDate) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchStreakData();
+    }
+  }, [isAuthenticated, fetchStreakData]);
+
+  const fetchDailyGoals = useCallback(async (startDate, endDate) => {
     try {
       const response = await api.get(`/streaks/daily-goals?startDate=${startDate}&endDate=${endDate}`);
       setDailyGoals(response.data);
@@ -52,9 +52,9 @@ export const StreakProvider = ({ children }) => {
       console.error('Failed to fetch daily goals:', error);
       return [];
     }
-  };
+  }, []);
 
-  const fetchWeeklyGoals = async (startDate, endDate) => {
+  const fetchWeeklyGoals = useCallback(async (startDate, endDate) => {
     try {
       const response = await api.get(`/streaks/weekly-goals?startDate=${startDate}&endDate=${endDate}`);
       setWeeklyGoals(response.data);
@@ -63,9 +63,9 @@ export const StreakProvider = ({ children }) => {
       console.error('Failed to fetch weekly goals:', error);
       return [];
     }
-  };
+  }, []);
 
-  const fetchCalendarData = async (year, month) => {
+  const fetchCalendarData = useCallback(async (year, month) => {
     try {
       const response = await api.get(`/streaks/calendar?year=${year}&month=${month}`);
       return response.data;
@@ -73,9 +73,9 @@ export const StreakProvider = ({ children }) => {
       console.error('Failed to fetch calendar data:', error);
       return [];
     }
-  };
+  }, []);
 
-  const addSession = async (sessionData) => {
+  const addSession = useCallback(async (sessionData) => {
     try {
       const response = await api.post('/sessions', sessionData);
       // Refresh streak data after adding session
@@ -88,9 +88,9 @@ export const StreakProvider = ({ children }) => {
         message: error.response?.data?.message || 'Failed to add session' 
       };
     }
-  };
+  }, [fetchStreakData]);
 
-  const updateSession = async (sessionId, sessionData) => {
+  const updateSession = useCallback(async (sessionId, sessionData) => {
     try {
       const response = await api.put(`/sessions/${sessionId}`, sessionData);
       // Refresh streak data after updating session
@@ -103,9 +103,9 @@ export const StreakProvider = ({ children }) => {
         message: error.response?.data?.message || 'Failed to update session' 
       };
     }
-  };
+  }, [fetchStreakData]);
 
-  const deleteSession = async (sessionId) => {
+  const deleteSession = useCallback(async (sessionId) => {
     try {
       await api.delete(`/sessions/${sessionId}`);
       // Refresh streak data after deleting session
@@ -118,9 +118,9 @@ export const StreakProvider = ({ children }) => {
         message: error.response?.data?.message || 'Failed to delete session' 
       };
     }
-  };
+  }, [fetchStreakData]);
 
-  const getSessionByDate = async (date) => {
+  const getSessionByDate = useCallback(async (date) => {
     try {
       const response = await api.get(`/sessions/date/${date}`);
       return { success: true, data: response.data };
@@ -134,7 +134,7 @@ export const StreakProvider = ({ children }) => {
         message: error.response?.data?.message || 'Failed to get session' 
       };
     }
-  };
+  }, []);
 
   const value = {
     streak,

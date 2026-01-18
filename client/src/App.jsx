@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { StreakProvider } from './contexts/StreakContext';
+import { PlannerProvider } from './contexts/PlannerContext';
+import { ToastProvider } from './contexts/ToastContext';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -34,25 +36,29 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <StreakProvider>
-          <Router>
-            <div className="min-h-screen bg-offwhite">
-              <Navbar />
-              <main className="container mx-auto px-4 py-8">
-                <Routes>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/calendar" element={<Calendar />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                </Routes>
-              </main>
-      </div>
-          </Router>
-        </StreakProvider>
-      </AuthProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <PlannerProvider>
+            <StreakProvider>
+              <Router>
+                <div className="min-h-screen bg-offwhite">
+                  <Navbar />
+                  <main className="container mx-auto px-4 py-6 sm:py-10">
+                    <Routes>
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/calendar" element={<Calendar />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    </Routes>
+                  </main>
+                </div>
+              </Router>
+            </StreakProvider>
+          </PlannerProvider>
+        </AuthProvider>
+      </ToastProvider>
     </ErrorBoundary>
   );
 }

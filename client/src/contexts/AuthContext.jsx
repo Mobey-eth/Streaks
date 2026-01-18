@@ -54,9 +54,12 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       console.error('Login error:', error);
+      const isUnauthorized = error.response?.status === 401;
       return { 
         success: false, 
-        message: error.response?.data?.message || 'Login failed' 
+        message: isUnauthorized
+          ? 'Invalid email or password'
+          : error.response?.data?.message || 'Login failed' 
       };
     }
   };
